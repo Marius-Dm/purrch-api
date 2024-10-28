@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: purrch_db_admin
+      POSTGRES_PASSWORD: purrch_db_pass_123
+      POSTGRES_DB: purrch_platform
+    ports:
+      - '5432:5432'
+
+volumes:
+  db:
+    driver: local

@@ -1,14 +1,16 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
+import { logApplicationDetails } from '@purrch/common/utils/index';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const logger = new Logger(bootstrap.name);
-
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('purrch/api');
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors({
     origin: '*',
   });
@@ -19,9 +21,12 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth({ type: 'http', name: 'AccessToken' })
     .build();
-
   const document = SwaggerModule.createDocument(app, configSwagger);
+  SwaggerModule.setup('purrch/api/docs', app, document);
 
-  await app.listen(3000);
+  const port = configService.getOrThrow<number>('HTTP_PORT');
+  await app.listen(port, '0.0.0.0').then(() => {
+    logApplicationDetails(port);
+  });
 }
 bootstrap();

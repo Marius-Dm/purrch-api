@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -14,8 +15,17 @@
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+
+    "paths": {
+      "@purrch/common": ["./src/common"],
+      "@purrch/common/*": ["./src/common/*"],
+      "@purrch/core": ["./src/core"],
+      "@purrch/core/*": ["./src/core/*"]
+    }
   }
 }

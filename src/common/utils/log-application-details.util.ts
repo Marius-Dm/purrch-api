@@ -10,7 +10,7 @@ export function logApplicationDetails(port: number) {
 ************************************************************
 *                                                          *
 *   Swagger running on:                                    *
-*   http://localhost:${port}/purrch/api/docs      *
+*   http://localhost:${port}/purrch/api/docs                  *
 *                                                          *
 ************************************************************
     `;

@@ -1,4 +1,5 @@
-import { Environment } from '@purrch/common/interfaces/environment.interface';
+import { parseRabbitMQExchanges } from '@purrch/common/utils/index';
+import { Environment } from '@purrch/common/interfaces/index';
 import * as process from 'node:process';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -23,5 +24,15 @@ export const environment: Environment = {
   jwtRefresh: {
     secret: process.env['JWT_REFRESH_SECRET']!,
     expiresIn: process.env['JWT_REFRESH_EXPIRES_IN']!,
+  },
+  rabbitmq: {
+    host: process.env['RABBITMQ_HOST']!,
+    port: parseInt(process.env['RABBITMQ_PORT']!, 10),
+    username: process.env['RABBITMQ_USERNAME']!,
+    password: process.env['RABBITMQ_PASSWORD']!,
+    protocol: process.env['RABBITMQ_PROTOCOL']
+      ? process.env['RABBITMQ_PROTOCOL']
+      : 'amqps',
+    exchanges: parseRabbitMQExchanges(process.env['RABBITMQ_EXCHANGES']!),
   },
 };

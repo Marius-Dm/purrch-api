@@ -13,6 +13,25 @@ services:
     ports:
       - '5432:5432'
 
+  purrch-rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: purrch-rabbitmq
+    restart: unless-stopped
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - purrch
+    volumes:
+      - rabbitmq:/etc/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: 'purrch'
+      RABBITMQ_DEFAULT_PASS: 'purrch'
+
 volumes:
+  rabbitmq:
   db:
     driver: local
+
+networks:
+  purrch:

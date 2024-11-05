@@ -1,5 +1,5 @@
-import { parseRabbitMQExchanges } from '@purrch/common/utils/index';
-import { Environment } from '@purrch/common/interfaces/index';
+import { parseRabbitMQExchanges } from '@purrch/common/utils';
+import { Environment } from '@purrch/common/interfaces';
 import * as process from 'node:process';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -18,12 +18,12 @@ export const environment: Environment = {
     schema: process.env['POSTGRES_SCHEMA']!,
   },
   jwtAccess: {
-    secret: process.env['JWT_SECRET']!,
-    expiresIn: process.env['JWT_EXPIRES_IN']!,
+    secret: process.env['JWT_ACCESS_TOKEN_SECRET']!,
+    expiresIn: process.env['JWT_ACCESS_TOKEN_EXPIRATION_TIME']!,
   },
   jwtRefresh: {
-    secret: process.env['JWT_REFRESH_SECRET']!,
-    expiresIn: process.env['JWT_REFRESH_EXPIRES_IN']!,
+    secret: process.env['JWT_REFRESH_TOKEN_SECRET']!,
+    expiresIn: process.env['JWT_REFRESH_TOKEN_EXPIRATION_TIME']!,
   },
   rabbitmq: {
     host: process.env['RABBITMQ_HOST']!,

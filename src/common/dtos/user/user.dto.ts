@@ -100,7 +100,7 @@ export class UserDto {
   })
   @IsString()
   @IsNotEmpty()
-  @Expose()
+  @Expose({ groups: ['sensitive'] })
   password!: string;
 
   @ApiPropertyOptional({

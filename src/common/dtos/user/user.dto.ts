@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import {
   IsUUID,
   IsNotEmpty,
@@ -9,6 +9,7 @@ import {
   IsEmail,
   IsUrl,
 } from 'class-validator';
+import { FollowerDto } from '@purrch/common/dtos';
 
 @Exclude()
 export class UserDto {
@@ -135,4 +136,24 @@ export class UserDto {
   @IsOptional()
   @Expose()
   coverImageUrl?: string;
+
+  @ApiPropertyOptional({
+    type: [FollowerDto],
+    description: 'List of users following this user',
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => FollowerDto)
+  @Expose()
+  followers?: FollowerDto[];
+
+  @ApiPropertyOptional({
+    type: [FollowerDto],
+    description: 'List of users this user is following',
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => FollowerDto)
+  @Expose()
+  followed?: FollowerDto[];
 }

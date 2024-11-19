@@ -1,5 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { UserDto } from '../user';
 
 @Exclude()
@@ -8,5 +8,9 @@ export class RegisterDto extends OmitType(UserDto, [
   'createdAt',
   'updatedAt',
   'deletedAt',
+  'followed',
+  'followers',
 ] as const) {
+  @Expose()
+  password!: string;
 }

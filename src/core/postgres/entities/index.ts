@@ -6,3 +6,4 @@ export { PurrsLikesEntity } from './purrs-likes.entity';
 export { NotificationsEntity } from './notifications.entity';
 export { PurrHashtagsEntity } from './purr-hashtags.entity';
 export { HashtagsEntity } from './hashtags.entity';
+export { AttachmentsEntity } from './attachments.entity';

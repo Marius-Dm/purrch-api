@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoggedUser, SetThrowError } from '@purrch/common/decorators';
 import { UsersEntity } from '@purrch/core/postgres/entities';
@@ -63,5 +63,20 @@ export class UserController {
   @Delete('me')
   async deleteUser(@LoggedUser() user: UsersEntity): Promise<void> {
     return this.userService.deleteUser(user.id);
+  }
+
+  @ApiOperation({ summary: 'Follow/unfollow user' })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully followed/unfollowed',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Patch(':userId/follow')
+  async followUser(
+    @LoggedUser() user: UsersEntity,
+    @Param('userId') userId: string,
+  ): Promise<void> {
+    return this.userService.followUser(user.id, userId);
   }
 }

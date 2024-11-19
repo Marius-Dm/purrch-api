@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { UsersEntity } from './users.entity';
 import { NotificationsEntity } from './notifications.entity';
+import { AttachmentsEntity } from '@purrch/core/postgres/entities/attachments.entity';
 
 @Entity('messages')
 export class MessagesEntity {
@@ -42,4 +43,7 @@ export class MessagesEntity {
 
   @OneToMany(() => NotificationsEntity, (notification) => notification.message)
   notifications!: NotificationsEntity[];
+
+  @OneToMany(() => AttachmentsEntity, (attachment) => attachment.message)
+  attachments!: AttachmentsEntity[];
 }

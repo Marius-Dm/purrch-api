@@ -13,6 +13,7 @@ import { UsersEntity } from './users.entity';
 import { PurrHashtagsEntity } from './purr-hashtags.entity';
 import { PurrsLikesEntity } from './purrs-likes.entity';
 import { NotificationsEntity } from './notifications.entity';
+import { PurrsImageEntity } from '@purrch/core/postgres/entities/purrs-image.entity';
 
 @Entity('purrs')
 export class PurrsEntity {
@@ -35,7 +36,7 @@ export class PurrsEntity {
   @JoinColumn({ name: 'user_id' })
   user!: UsersEntity;
 
-  @Column({ name: 'orignal_purr_id', type: 'uuid', nullable: true })
+  @Column({ name: 'original_purr_id', type: 'uuid', nullable: true })
   originalPurrId?: string;
 
   @OneToMany(() => PurrsEntity, (purr) => purr.originalPurr)
@@ -48,9 +49,6 @@ export class PurrsEntity {
   @Column({ type: 'text', nullable: true })
   content?: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  media_url?: string;
-
   @OneToMany(() => PurrHashtagsEntity, (purrHashtag) => purrHashtag.purr)
   purrHashtags!: PurrHashtagsEntity[];
 
@@ -59,4 +57,7 @@ export class PurrsEntity {
 
   @OneToMany(() => NotificationsEntity, (notification) => notification.purr)
   notifications!: NotificationsEntity[];
+
+  @OneToMany(() => PurrsImageEntity, (image) => image.purr)
+  images!: PurrsImageEntity[];
 }

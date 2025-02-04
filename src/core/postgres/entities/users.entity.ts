@@ -12,6 +12,8 @@ import { FollowersEntity } from './followers.entity';
 import { MessagesEntity } from './messages.entity';
 import { PurrsLikesEntity } from './purrs-likes.entity';
 import { NotificationsEntity } from './notifications.entity';
+import { UsersImageEntity } from '@purrch/core/postgres/entities/users-image.entity';
+import { UsersCoverImageEntity } from '@purrch/core/postgres/entities/users-cover-image.entity';
 
 @Entity('users')
 export class UsersEntity {
@@ -26,6 +28,7 @@ export class UsersEntity {
 
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
   deletedAt?: Date;
+
 
   @Column({ type: 'varchar', length: 50, unique: true })
   username!: string;
@@ -45,21 +48,8 @@ export class UsersEntity {
   @Column({ type: 'text', nullable: true })
   bio?: string;
 
-  @Column({
-    name: 'profile_image_url',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  profileImageUrl?: string;
-
-  @Column({
-    name: 'cover_image_url',
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  coverImageUrl?: string;
+  @Column({ name: 'is_email_confirmed', type: 'boolean', default: false })
+  isEmailConfirmed!: boolean;
 
   @OneToMany(() => PurrsEntity, (purr) => purr.user)
   purrs!: PurrsEntity[];
@@ -87,4 +77,10 @@ export class UsersEntity {
     (notification) => notification.relatedUser,
   )
   relatedNotifications!: NotificationsEntity[];
+
+  @OneToMany(() => UsersImageEntity, (image) => image.user)
+  userImages!: UsersImageEntity[];
+
+  @OneToMany(() => UsersCoverImageEntity, (coverImage) => coverImage.user)
+  coverImage!: UsersCoverImageEntity;
 }

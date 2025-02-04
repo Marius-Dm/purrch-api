@@ -35,4 +35,12 @@ export const environment: Environment = {
       : 'amqps',
     exchanges: parseRabbitMQExchanges(process.env['RABBITMQ_EXCHANGES']!),
   },
+  minio: {
+    endpoint: process.env['MINIO_ENDPOINT']!,
+    port: parseInt(process.env['MINIO_PORT']!, 10),
+    useSSL: process.env['MINIO_USE_SSL'] === 'false',
+    accessKey: process.env['MINIO_ACCESS_KEY']!,
+    secretKey: process.env['MINIO_SECRET_KEY']!,
+    bucketName: process.env['MINIO_BUCKET_NAME']!,
+  }
 };

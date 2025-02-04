@@ -12,15 +12,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+           fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20.12.2'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --frozen-lockfile
 
       - name: Build the app
         run: npm run build

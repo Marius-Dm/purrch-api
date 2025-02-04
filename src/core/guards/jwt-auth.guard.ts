@@ -8,11 +8,11 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import * as jwt from 'jsonwebtoken';
-import { UserService } from '../../modules/user/user.service';
 import { RequestWithUser, TokenPayload } from '@purrch/common/interfaces';
 import { logAndThrowError } from '@purrch/common/utils';
-import { UserDto } from '@purrch/common/dtos';
 import { UsersEntity } from '@purrch/core/postgres/entities';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 
 @Injectable()
@@ -21,7 +21,8 @@ export class JwtAuthGuard implements CanActivate {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly userService: UserService,
+    @InjectRepository(UsersEntity)
+    private readonly userRepository: Repository<UsersEntity>,
     private readonly reflector: Reflector,
   ) {
   }
@@ -60,7 +61,7 @@ export class JwtAuthGuard implements CanActivate {
       return true;
     }
 
-    const user: UserDto | UsersEntity = await this.userService.findOneUser(payload.sub);
+    const user: UsersEntity = await this.userRepository.findOneBy({ id: payload.sub });
 
     if (!user) {
       if (throwError) {

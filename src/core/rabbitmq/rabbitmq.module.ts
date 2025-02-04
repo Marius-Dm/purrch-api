@@ -13,9 +13,11 @@ import {
       exchanges: environment.rabbitmq.exchanges,
       defaultRpcTimeout: RABBITMQ_DEFAULT_RPC_TIMEOUT,
       connectionInitOptions: RABBITMQ_CONNECTION_INIT_OPTIONS,
-      uri: `${environment.rabbitmq.protocol}://${environment.rabbitmq.username}:${environment.rabbitmq.password}@${environment.rabbitmq.host}:${environment.rabbitmq.port}`,
-    }),
+      uri: `${environment.rabbitmq.protocol}://${environment.rabbitmq.username}:${environment.rabbitmq.password}@${environment.rabbitmq.host}:${environment.rabbitmq.port}`
+    })
   ],
-  exports: [RabbitMQModule],
+  exports: [RabbitMQModule]
 })
-export class RabbitmqModule {}
+export class RabbitmqModule {
+
+}

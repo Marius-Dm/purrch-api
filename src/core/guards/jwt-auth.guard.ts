@@ -63,7 +63,7 @@ export class JwtAuthGuard implements CanActivate {
 
     const user: UsersEntity = await this.userRepository.findOneBy({ id: payload.sub });
 
-    if (!user) {
+    if (!user || user.isEmailConfirmed === false) {
       if (throwError) {
         logAndThrowError(this.logger, this.canActivate.name, 'User not found', UnauthorizedException);
       }

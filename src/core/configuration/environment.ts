@@ -42,5 +42,11 @@ export const environment: Environment = {
     accessKey: process.env['MINIO_ACCESS_KEY']!,
     secretKey: process.env['MINIO_SECRET_KEY']!,
     bucketName: process.env['MINIO_BUCKET_NAME']!,
+  },
+  sendgrid: {
+    apiKey: process.env['SENDGRID_API_KEY']!,
+    from: process.env['SENDGRID_SENDER_EMAIL']!,
+    secret: process.env['SENDGRID_TOKEN_SECRET']!,
+    expiresIn: process.env['SENDGRID_TOKEN_EXPIRATION_TIME']!,
   }
 };

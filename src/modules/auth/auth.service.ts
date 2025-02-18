@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto, RegisterDto, TokensDto } from '@purrch/common/dtos';
 import { logAndThrowError } from '@purrch/common/utils';
@@ -9,6 +9,7 @@ import { TokenPayload } from '@purrch/common/interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { environment } from '@purrch/core/configuration';
 import { plainToInstance } from 'class-transformer';
+import { EmailService } from '@purrch/core/email/email.service';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly usersRepository: Repository<UsersEntity>,
+    private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
   ) {
   }
@@ -47,12 +49,19 @@ export class AuthService {
     try {
       const hashedPassword: string = await bcrypt.hash(registerDto.password, 10);
 
-      const newUser = this.usersRepository.create({
+      const newUser: UsersEntity = this.usersRepository.create({
         ...registerDto,
         password: hashedPassword,
       });
-      const savedUser = await this.usersRepository.save(newUser);
+      const savedUser: UsersEntity = await this.usersRepository.save(newUser);
       delete savedUser.password;
+
+      const sendGridToken: string = await this.jwtService.signAsync(
+        { email: savedUser.email },
+        { secret: environment.sendgrid.secret, expiresIn: environment.sendgrid.expiresIn },
+      );
+
+      await this.emailService.sendVerificationEmail(savedUser.email, sendGridToken);
 
       return await this.getJWTTokens(savedUser.id, savedUser.email);
     } catch (error) {
@@ -66,7 +75,7 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto): Promise<TokensDto> {
-    const user = await this.usersRepository.findOne({
+    const user: UsersEntity = await this.usersRepository.findOne({
       where: { email: loginDto.email },
     });
 
@@ -88,12 +97,12 @@ export class AuthService {
       email,
     };
 
-    const accessToken = await this.jwtService.signAsync(payload, {
+    const accessToken: string = await this.jwtService.signAsync(payload, {
       secret: environment.jwtAccess.secret,
       expiresIn: environment.jwtAccess.expiresIn,
     });
 
-    const refreshToken = await this.jwtService.signAsync(payload, {
+    const refreshToken: string = await this.jwtService.signAsync(payload, {
       secret: environment.jwtRefresh.secret,
       expiresIn: environment.jwtRefresh.expiresIn,
     });
@@ -110,5 +119,17 @@ export class AuthService {
     });
 
     return await this.usersRepository.findOneBy({ id: payload.sub });
+  }
+
+  async verifyEmail(token: string): Promise<void> {
+    const decoded = await this.jwtService.verifyAsync(token, { secret: environment.sendgrid.secret });
+    const user: UsersEntity = await this.usersRepository.findOneBy({ email: decoded.email });
+
+    if (!user) {
+      logAndThrowError(this.logger, this.verifyEmail.name, 'User not found', NotFoundException);
+    }
+
+    user.isEmailConfirmed = true;
+    await this.usersRepository.save(user);
   }
 }

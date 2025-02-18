@@ -1,10 +1,11 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDto, RegisterDto, TokensDto } from '@purrch/common/dtos';
 import { JwtRefreshGuard } from '@purrch/core/guards';
 import { LoggedUser } from '@purrch/common/decorators';
 import { UsersEntity } from '@purrch/core/postgres/entities';
+import { Response } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -43,4 +44,22 @@ export class AuthController {
     return this.authService.getJWTTokens(user.id, user.email);
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'User email successfully confirmed',
+  })
+  @Get('verify-email')
+  async verifyEmail(@Query('token') token: string, @Res() res: Response): Promise<void> {
+    await this.authService.verifyEmail(token);
+
+    res.send(`
+      <html>
+        <body>
+          <script>
+            window.close();
+          </script>
+        </body>
+      </html>
+    `);
+  }
 }

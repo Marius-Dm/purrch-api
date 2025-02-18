@@ -8,6 +8,7 @@ import { PostgresModule } from '@purrch/core/postgres/postgres.module';
 import { UserModule } from './user/user.module';
 import { PurrsModule } from './purrs/purrs.module';
 import { HashtagModule } from './hashtag/hashtag.module';
+import { EmailModule } from '@purrch/core/email/email.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { HashtagModule } from './hashtag/hashtag.module';
     RabbitmqModule,
     AuthModule,
     UserModule,
+    EmailModule,
     PurrsModule,
     HashtagModule,
   ],

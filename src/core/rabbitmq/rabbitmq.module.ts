@@ -9,7 +9,7 @@ import {
 @Global()
 @Module({
   imports: [
-    RabbitMQModule.forRoot(RabbitMQModule, {
+    RabbitMQModule.forRoot({
       exchanges: environment.rabbitmq.exchanges,
       defaultRpcTimeout: RABBITMQ_DEFAULT_RPC_TIMEOUT,
       connectionInitOptions: RABBITMQ_CONNECTION_INIT_OPTIONS,

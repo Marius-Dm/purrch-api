@@ -4,6 +4,7 @@ import { JwtConfiguration } from './configuration/jwt-configuration';
 import { EnvironmentConfiguration } from './configuration/env-configuration';
 import { RabbitMQConfiguration } from './configuration/rabbitmq-configuration';
 import { MinioConfiguration } from '@purrch/common/interfaces/configuration/minio-configuration';
+import { SendgridConfiguration } from '@purrch/common/interfaces/configuration/sendgrid-configuration';
 
 export interface Environment {
   environment: EnvironmentConfiguration;
@@ -13,4 +14,5 @@ export interface Environment {
   jwtRefresh: JwtConfiguration;
   rabbitmq: RabbitMQConfiguration;
   minio: MinioConfiguration;
+  sendgrid: SendgridConfiguration;
 }

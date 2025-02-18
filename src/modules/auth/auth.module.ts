@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from '@purrch/core/postgres/entities';
 import { JwtRefreshStrategy } from '@purrch/core/strategies';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { EmailService } from '@purrch/core/email/email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsersEntity]),
@@ -13,7 +14,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     ThrottlerModule.forRoot(),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtRefreshStrategy],
+  providers: [AuthService, EmailService, JwtRefreshStrategy],
   exports: [AuthService],
 })
 export class AuthModule {
